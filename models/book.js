@@ -28,6 +28,14 @@ async function getBooksByAuthor(author) {
   return result.rows;
 }
 
+async function getBooksByTypeAndAuthor(type, author) {
+  const result = await pool.query(
+    'SELECT * FROM books WHERE ($1::text IS NULL OR type = $1) AND ($2::text IS NULL OR author ILIKE $2)',
+    [type ?? null, author == null ? null : `%${author}%`]
+  );
+  return result.rows;
+}
+
 async function updateBook(id, title, author, read, type) {
   const result = await pool.query(
     'UPDATE books SET title = $1, author = $2, read = $3, type = $4 WHERE id = $5 RETURNING *',
@@ -41,4 +49,4 @@ async function deleteBook(id) {
   return result.rows[0];
 }
 
-export { createBook, getAllBooks, getBookById, getBooksByType, getBooksByAuthor, updateBook, deleteBook };
+export { createBook, getAllBooks, getBookById, getBooksByType, getBooksByAuthor, getBooksByTypeAndAuthor, updateBook, deleteBook };
