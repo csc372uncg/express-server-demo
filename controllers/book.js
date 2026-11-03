@@ -1,4 +1,4 @@
-import { createBook, getAllBooks, getBookById, getBooksByType, getBooksByAuthor, updateBook, deleteBook } from '../models/book.js';
+import { createBook, getAllBooks, getBookById, getBooksByType, getBooksByAuthor, getBooksByTypeAndAuthor, updateBook, deleteBook } from '../models/book.js';
 
 function createHttpError(statusCode, message) {
   const error = new Error(message);
@@ -21,8 +21,14 @@ async function createBookController(req, res, next) {
 
 async function getAllBooksController(req, res, next) {
   try {
-    const books = await getAllBooks();
-    res.status(200).json(books);
+    const { type, author } = req.query;
+    if (type || author) {
+      const books = await getBooksByTypeAndAuthor(type, author);
+      res.status(200).json(books);
+    } else {
+      let books = await getAllBooks();
+      res.status(200).json(books);
+    }
   } catch (error) {
     next(error);
   }
