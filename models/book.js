@@ -19,19 +19,19 @@ async function getBookById(id) {
 }
 
 async function getBooksByType(type) {
-  const result = await pool.query('SELECT * FROM books WHERE type = $1', [type]);
+  const result = await pool.query('SELECT * FROM books WHERE type ILIKE $1', [`%${type}%`]);
   return result.rows;
 }
 
 async function getBooksByAuthor(author) {
-  const result = await pool.query('SELECT * FROM books WHERE author ilike $1', [`%${author}%`]);
+  const result = await pool.query('SELECT * FROM books WHERE author ILIKE $1', [`%${author}%`]);
   return result.rows;
 }
 
 async function getBooksByTypeAndAuthor(type, author) {
   const result = await pool.query(
-    'SELECT * FROM books WHERE ($1::text IS NULL OR type = $1) AND ($2::text IS NULL OR author ILIKE $2)',
-    [type ?? null, author == null ? null : `%${author}%`]
+    'SELECT * FROM books WHERE  type ILIKE $1 AND author ILIKE $2',
+    [`%${type}%`, `%${author}%`]
   );
   return result.rows;
 }

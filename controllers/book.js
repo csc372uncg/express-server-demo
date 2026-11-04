@@ -22,8 +22,18 @@ async function createBookController(req, res, next) {
 async function getAllBooksController(req, res, next) {
   try {
     const { type, author } = req.query;
-    if (type || author) {
-      const books = await getBooksByTypeAndAuthor(type, author);
+    const normalizedType = typeof type === 'string' ? type.trim() : '';
+    const normalizedAuthor = typeof author === 'string' ? author.trim() : '';
+    const hasType = normalizedType !== '';
+    const hasAuthor = normalizedAuthor !== '';
+    if (hasType && hasAuthor) {
+      const books = await getBooksByTypeAndAuthor(normalizedType, normalizedAuthor);
+      res.status(200).json(books);
+    } else if (hasType) {
+      const books = await getBooksByType(normalizedType);
+      res.status(200).json(books);
+    } else if (hasAuthor) {
+      const books = await getBooksByAuthor(normalizedAuthor);
       res.status(200).json(books);
     } else {
       let books = await getAllBooks();
