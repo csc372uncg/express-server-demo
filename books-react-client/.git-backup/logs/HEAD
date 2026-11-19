@@ -1,3 +1,0 @@
-0000000000000000000000000000000000000000 d1d8b01db12f5ef08880a08b66a096c2650e3ebe csc340-uncg <uncg.csc340@gmail.com> 1793834433 -0500	clone: from https://github.com/csc372uncg/books-react-client.git
-d1d8b01db12f5ef08880a08b66a096c2650e3ebe 72bbbe9134757a89708ed671009e8e69f5d76ba1 csc340-uncg <uncg.csc340@gmail.com> 1793834905 -0500	commit: feat: initialize React project with Vite, add essential files and styles
-72bbbe9134757a89708ed671009e8e69f5d76ba1 51499b0cc0b60c8f7639e8d49494296d98155ac0 csc340-uncg <uncg.csc340@gmail.com> 1793834915 -0500	commit: feat: implement book management features with routing and forms
