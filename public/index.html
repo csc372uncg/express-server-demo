@@ -35,31 +35,69 @@
         </section>
 
         <aside class="form-panel">
-          <p class="eyebrow">MAKE ROOM FOR A NEW STORY</p>
-          <h2>Add a book</h2>
-          <form id="create-book-form" class="book-form">
-            <label>
-              Title
-              <input name="title" type="text" maxlength="200" required>
-            </label>
-            <label>
-              Author
-              <input name="author" type="text" maxlength="200" required>
-            </label>
-            <label>
-              Type
-              <input name="type" type="text" maxlength="100" placeholder="Fiction, memoir..." required>
-            </label>
-            <label>
-              Reading status
-              <select name="read" required>
-                <option value="false">Want to read</option>
-                <option value="true">Already read</option>
-              </select>
-            </label>
-            <button class="button button-primary" type="submit">Add to my shelf</button>
-            <p id="form-message" class="notice" role="status" aria-live="polite"></p>
-          </form>
+          <section id="auth-panel" aria-labelledby="auth-heading">
+            <p class="eyebrow">YOUR PERSONAL LIBRARY</p>
+            <h2 id="auth-heading">Sign in or create an account</h2>
+            <form id="login-form" class="book-form auth-form">
+              <h3>Log in</h3>
+              <label>
+                Username
+                <input name="username" type="text" minlength="3" maxlength="30" autocomplete="username" required>
+              </label>
+              <label>
+                Password
+                <input name="password" type="password" minlength="8" autocomplete="current-password" required>
+              </label>
+              <button class="button button-primary" type="submit">Log in</button>
+            </form>
+            <form id="signup-form" class="book-form auth-form">
+              <h3>Sign up</h3>
+              <label>
+                Username
+                <input name="username" type="text" minlength="3" maxlength="30" autocomplete="username" required>
+              </label>
+              <label>
+                Password
+                <input name="password" type="password" minlength="8" autocomplete="new-password" required>
+              </label>
+              <button class="button button-primary" type="submit">Create account</button>
+            </form>
+            <p id="auth-message" class="notice" role="status" aria-live="polite"></p>
+          </section>
+
+          <section id="signed-in-panel" hidden>
+            <p class="eyebrow">YOUR PERSONAL LIBRARY</p>
+            <p id="account-message"></p>
+            <button id="logout-button" class="button button-danger" type="button">Log out</button>
+          </section>
+
+          <section id="create-book-section" hidden>
+            <p class="eyebrow">MAKE ROOM FOR A NEW STORY</p>
+            <h2>Add a book</h2>
+            <form id="create-book-form" class="book-form">
+              <label>
+                Title
+                <input name="title" type="text" maxlength="200" required>
+              </label>
+              <label>
+                Author
+                <input name="author" type="text" maxlength="200" required>
+              </label>
+              <label>
+                Type
+                <input name="type" type="text" maxlength="100" placeholder="Fiction, memoir..." required>
+              </label>
+              <label>
+                Reading status
+                <select name="read" required>
+                  <option value="false">Want to read</option>
+                  <option value="true">Already read</option>
+                </select>
+              </label>
+              <button class="button button-primary" type="submit">Add to my shelf</button>
+              <p id="form-message" class="notice" role="status" aria-live="polite"></p>
+            </form>
+          </section>
         </aside>
       </section>
     </main>

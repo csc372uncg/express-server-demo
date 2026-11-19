@@ -1,4 +1,6 @@
 const API_URL = '/api/books';
+const AUTH_URL = '/api/auth';
+let currentUser = null;
 
 async function requestJson(url, options) {
   const response = await fetch(url, options);
@@ -38,13 +40,16 @@ function makeBookCard(book) {
   const status = document.createElement('span');
   status.className = 'read-status';
   status.textContent = getReadStatus(book);
-  const deleteButton = document.createElement('button');
-  deleteButton.className = 'text-button';
-  deleteButton.type = 'button';
-  deleteButton.textContent = 'Delete';
-  deleteButton.setAttribute('aria-label', `Delete ${book.title}`);
-  deleteButton.addEventListener('click', () => deleteBook(book.id, book.title));
-  footer.append(status, deleteButton);
+  footer.append(status);
+  if (currentUser) {
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'text-button';
+    deleteButton.type = 'button';
+    deleteButton.textContent = 'Delete';
+    deleteButton.setAttribute('aria-label', `Delete ${book.title}`);
+    deleteButton.addEventListener('click', () => deleteBook(book.id, book.title));
+    footer.append(deleteButton);
+  }
 
   card.append(detailsLink, footer);
   return card;
@@ -125,6 +130,88 @@ function setupCreateForm() {
   });
 }
 
+function updateAuthUi() {
+  const authPanel = document.querySelector('#auth-panel');
+  const signedInPanel = document.querySelector('#signed-in-panel');
+  const createBookSection = document.querySelector('#create-book-section');
+  const accountMessage = document.querySelector('#account-message');
+  const detailDeleteButton = document.querySelector('#delete-book');
+
+  if (authPanel) authPanel.hidden = Boolean(currentUser);
+  if (signedInPanel) signedInPanel.hidden = !currentUser;
+  if (createBookSection) createBookSection.hidden = !currentUser;
+  if (detailDeleteButton) detailDeleteButton.hidden = !currentUser;
+  if (currentUser && accountMessage) {
+    accountMessage.textContent = `Logged in as ${currentUser.username}.`;
+  }
+}
+
+async function initializeAuth() {
+  const message = document.querySelector('#auth-message');
+  try {
+    const result = await requestJson(`${AUTH_URL}/me`);
+    currentUser = result.user;
+    if (message) {
+      message.textContent = '';
+      message.classList.remove('notice-error');
+    }
+  } catch (error) {
+    currentUser = null;
+    if (message) {
+      message.textContent = `Could not check your login status: ${error.message}`;
+      message.classList.add('notice-error');
+    }
+  }
+  updateAuthUi();
+}
+
+function setupAuthForms() {
+  for (const [formId, endpoint] of [['login-form', 'login'], ['signup-form', 'signup']]) {
+    const form = document.querySelector(`#${formId}`);
+    if (!form) continue;
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const message = document.querySelector('#auth-message');
+      const fields = new FormData(form);
+      try {
+        await requestJson(`${AUTH_URL}/${endpoint}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: fields.get('username'),
+            password: fields.get('password')
+          })
+        });
+        form.reset();
+        await initializeAuth();
+        await loadBooks();
+        message.classList.remove('notice-error');
+        message.textContent = endpoint === 'signup' ? 'Your account was created.' : 'You are logged in.';
+      } catch (error) {
+        message.textContent = `Could not ${endpoint === 'signup' ? 'sign up' : 'log in'}: ${error.message}`;
+        message.classList.add('notice-error');
+      }
+    });
+  }
+
+  const logoutButton = document.querySelector('#logout-button');
+  if (logoutButton) {
+    logoutButton.addEventListener('click', async () => {
+      const message = document.querySelector('#auth-message');
+      try {
+        await requestJson(`${AUTH_URL}/logout`, { method: 'POST' });
+        await initializeAuth();
+        await loadBooks();
+        message.textContent = 'You are logged out.';
+      } catch (error) {
+        message.textContent = `Could not log out: ${error.message}`;
+        message.classList.add('notice-error');
+      }
+    });
+  }
+}
+
 async function setupBookDetails() {
   const form = document.querySelector('#edit-book-form');
   if (!form) return;
@@ -155,7 +242,10 @@ async function setupBookDetails() {
   form.elements.author.value = book.author;
   form.elements.type.value = book.type;
   form.elements.read.value = String(Boolean(book.read));
-  form.hidden = false;
+  form.hidden = !currentUser;
+  if (!currentUser) {
+    message.textContent = 'Log in from the library page to edit this book.';
+  }
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -198,6 +288,12 @@ async function setupBookDetails() {
   });
 }
 
-setupCreateForm();
-loadBooks();
-setupBookDetails();
+async function startApp() {
+  await initializeAuth();
+  setupAuthForms();
+  setupCreateForm();
+  await loadBooks();
+  await setupBookDetails();
+}
+
+startApp();

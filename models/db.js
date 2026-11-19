@@ -11,5 +11,10 @@ read BOOLEAN DEFAULT false,
 type TEXT
 )`);
 
+await pool.query(`CREATE TABLE IF NOT EXISTS users (
+id SERIAL PRIMARY KEY,
+username TEXT NOT NULL UNIQUE,
+password_hash TEXT NOT NULL
+)`);
 
 export default pool;
