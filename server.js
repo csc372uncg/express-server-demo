@@ -13,7 +13,11 @@ if (!process.env.SESSION_SECRET) {
 const app = express();
 app.use(logger);
 app.use(express.json());
-app.use(cors());
+//Allow a Vite React client later!
+app.use(cors({
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
+  credentials: true
+}));
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
