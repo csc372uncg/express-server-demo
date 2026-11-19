@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f3ed">
+    <title>Book Nook | Library</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">Book Nook</a>
+      <span class="header-note">Your personal library</span>
+    </header>
+
+    <main class="page-shell">
+      <section class="intro">
+        <p class="eyebrow">A LITTLE SPACE FOR BIG STORIES</p>
+        <h1>Your bookshelf</h1>
+        <p class="intro-copy">Keep track of the books you love, and the ones still waiting to be read.</p>
+      </section>
+
+      <section class="content-grid">
+        <section class="library-panel" aria-labelledby="library-heading">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">THE COLLECTION</p>
+              <h2 id="library-heading">All books</h2>
+            </div>
+            <span id="book-count" class="count-badge">Loading...</span>
+          </div>
+          <p id="gallery-message" class="notice" role="status" aria-live="polite"></p>
+          <div id="book-list" class="book-grid"></div>
+        </section>
+
+        <aside class="form-panel">
+          <p class="eyebrow">MAKE ROOM FOR A NEW STORY</p>
+          <h2>Add a book</h2>
+          <form id="create-book-form" class="book-form">
+            <label>
+              Title
+              <input name="title" type="text" maxlength="200" required>
+            </label>
+            <label>
+              Author
+              <input name="author" type="text" maxlength="200" required>
+            </label>
+            <label>
+              Type
+              <input name="type" type="text" maxlength="100" placeholder="Fiction, memoir..." required>
+            </label>
+            <label>
+              Reading status
+              <select name="read" required>
+                <option value="false">Want to read</option>
+                <option value="true">Already read</option>
+              </select>
+            </label>
+            <button class="button button-primary" type="submit">Add to my shelf</button>
+            <p id="form-message" class="notice" role="status" aria-live="polite"></p>
+          </form>
+        </aside>
+      </section>
+    </main>
+    <footer class="site-footer">A good book is always in season.</footer>
+  </body>
+</html>

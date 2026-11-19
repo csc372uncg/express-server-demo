@@ -35,3 +35,7 @@ This project demonstrates a simple Express.js server with routes for managing bo
    ```
 
    The server will run on `http://localhost:3000` by default.
+
+   ## Web interface
+
+   Open `http://localhost:3000` to view your book gallery and add books. Select a book to view or edit its details. Books can be deleted from either the gallery or the details page.

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f6f3ed">
+    <title>Book details | Book Nook</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="/">Book Nook</a>
+      <a class="header-link" href="/">Back to my shelf</a>
+    </header>
+
+    <main class="page-shell detail-shell">
+      <a class="back-link" href="/">&larr; All books</a>
+      <section class="detail-panel">
+        <p class="eyebrow">BOOK DETAILS</p>
+        <h1 id="detail-heading">Loading book...</h1>
+        <p id="detail-message" class="notice" role="status" aria-live="polite"></p>
+        <form id="edit-book-form" class="book-form detail-form" hidden>
+          <label>
+            Title
+            <input name="title" type="text" maxlength="200" required>
+          </label>
+          <label>
+            Author
+            <input name="author" type="text" maxlength="200" required>
+          </label>
+          <label>
+            Type
+            <input name="type" type="text" maxlength="100" required>
+          </label>
+          <label>
+            Reading status
+            <select name="read" required>
+              <option value="false">Want to read</option>
+              <option value="true">Already read</option>
+            </select>
+          </label>
+          <div class="form-actions">
+            <button class="button button-primary" type="submit">Save changes</button>
+            <button id="delete-book" class="button button-danger" type="button">Delete book</button>
+          </div>
+        </form>
+      </section>
+    </main>
+    <footer class="site-footer">A good book is always in season.</footer>
+  </body>
+</html>

@@ -9,7 +9,7 @@ function createHttpError(statusCode, message) {
 async function createBookController(req, res, next) {
   try {
     const { title, author, read, type } = req.body;
-    if (!title || !author || !read || !type) {
+    if (!title || !author || read === undefined || read === null || !type) {
       return next(createHttpError(400, 'All fields are required'));
     }
     const book = await createBook(title, author, read, type);
